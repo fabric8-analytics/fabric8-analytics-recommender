@@ -1,0 +1,12 @@
+matplotlib
+numpy
+# scikit-learn
+# scipy
+pytest
+flask
+pymongo==3.2.2
+gunicorn
+psycopg2
+flask-cors==3.0.2
+semantic_version
+requests

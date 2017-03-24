@@ -1,0 +1,43 @@
+= Bayesian Analytics
+
+Clone Bayesian Analytics repository
+----
+git clone git@gitlab.cee.redhat.com:bayesian/Analytics.git
+cd Analytics/models
+----
+
+Each model accounts for offline/online analytics jobs. Accordingly the folder structure has been setup.
+  Offline model is all about training the analytics model.
+  Online model is then about scoring based on an input.
+
+== Running the recommendation service standalone
+
+----
+$ cd <your_model_of_choice> #in this case we only have `similarity_with_frequent_patterns`
+$ virtualenv --system-site-packages env
+$ source env/bin/activate
+$ pip install -r deployment/requirements.txt
+----
+
+Copy `src/scoring/config.py.template` to `src/scoring/config.py` and update the configuration in `src/scoring/config.py`
+
+Start the server now
+----
+$ gunicorn --pythonpath src/scoring -b 0.0.0.0:5000 -t 300 ghazab_app:app
+----
+
+Call Recommendation API Endpoint
+----
+$ curl -XPOST "packagejson=@tests/data/sample.json" "http://127.0.0.1:5000/api/v1.0/recommendation"
+----
+
+= Tests
+
+== How to run tests?
+
+----
+$ cd <your_model_of_choice>/src/unittest/scripts
+$ source virtual_test.sh
+----
+
+'''

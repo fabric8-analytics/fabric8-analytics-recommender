@@ -1,0 +1,21 @@
+FROM centos:7
+MAINTAINER Bargava Subramanian <bsubrama@redhat.com>
+
+RUN yum install -y epel-release && \
+    yum install -y python-pip python-devel gcc && \
+    yum clean all
+
+
+# install python packages
+COPY ./src/deployment/spark_aws/training_requirements.txt /
+RUN pip install -r /training_requirements.txt && rm /training_requirements.txt
+
+# bring src code for training-job into current dir
+COPY ./src/deployment/spark_aws/job_scheduler.py /
+COPY ./src/deployment/spark_aws/submit_training_job.py /
+COPY ./src/models/similarity_with_frequent_patterns/training/gen_ref_stacks.py /
+COPY ./src/deployment/spark_aws/config.py.template /config.py
+
+ADD ./src/deployment/spark_aws/entrypoint.sh /bin/entrypoint.sh
+
+ENTRYPOINT ["/bin/entrypoint.sh"]

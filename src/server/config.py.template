@@ -1,0 +1,9 @@
+import os
+
+TESTING = False
+DEBUG = True
+
+# Configuration for Analytics Threshold values
+JACCARD_THRESHOLD = os.getenv('JACCARD_THRESHOLD',0.3)
+SIMILARITY_SCORE_THRESHOLD = os.getenv('SIMILARITY_SCORE_THRESHOLD',0.3)
+BAYESIAN_GRAPH_URL = os.getenv('BAYESIAN_GRAPH_URL','http://gremlin-data-model-analytics.che.ci.centos.org')
