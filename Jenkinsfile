@@ -37,17 +37,10 @@ if (env.BRANCH_NAME == 'master') {
 			}
         }
 
-        //stage('Deploy - rh-idev') {
-        //    rerunOpenShiftJob {
-        //        jobName = 'bayesian-analytics-training'
-        //        cluster = 'rh-idev'
-        //    }
-        //}
-
-        stage('Deploy - dsaas') {
+        stage('Deploy - rh-idev') {
             rerunOpenShiftJob {
                 jobName = 'bayesian-analytics-training'
-                cluster = 'dsaas'
+                cluster = 'rh-idev'
             }
         }
     }
