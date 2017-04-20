@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: bayesian-analytics-training
+metadata:
+  name: bayesian-analytics-training
+  annotations:
+    description: bayesian-analytics-training
+objects:
+- apiVersion: extensions/v1beta1
+  kind: Job
+  metadata:
+    name: bayesian-analytics-training
+  spec:
+    selector:
+      matchLabels:
+        app: bayesian-analytics-training
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: bayesian-analytics-training
+        labels:
+          app: bayesian-analytics-training
+      spec:
+        containers:
+        - command:
+          - /bin/entrypoint.sh
+          env:
+          - name: DEPLOYMENT_PREFIX
+            valueFrom:
+              configMapKeyRef:
+                name: bayesian-config
+                key: deployment-prefix
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws
+                key: emr-access-key-id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws
+                key: emr-secret-access-key
+          image: "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${IMAGE_TAG}"
+          name: bayesian-analytics-training
+          resources:
+            limits:
+              memory: "512Mi"
+        restartPolicy: OnFailure
+    test: false
+    triggers:
+    - type: ConfigChange
+
+parameters:
+- description: Docker registry where the image is
+  displayName: Docker registry
+  required: true
+  name: DOCKER_REGISTRY
+  value: "registry.devshift.net"
+
+- description: Docker image to use
+  displayName: Docker image
+  required: true
+  name: DOCKER_IMAGE
+  value: "bayesian/analytics-training"
+
+- description: Image tag
+  displayName: Image tag
+  required: true
+  name: IMAGE_TAG
+  value: "latest"  # image-tag
