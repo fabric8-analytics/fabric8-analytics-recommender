@@ -1,6 +1,6 @@
-= Bayesian Analytics
+= Fabric8-Analytics Analytics
 
-Clone Bayesian Analytics repository
+Clone Fabric8-Analytics Analytics repository
 ----
 git clone git@gitlab.cee.redhat.com:bayesian/Analytics.git
 cd Analytics/models
