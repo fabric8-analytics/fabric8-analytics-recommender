@@ -41,8 +41,4 @@ $ curl -XPOST "packagejson=@tests/data/sample.json" "http://127.0.0.1:5000/api/v
 $ cd <your_model_of_choice>/src/unittest/scripts
 $ source virtual_test.sh
 ----
-
-== Contributing
-See our https://github.com/fabric8-analytics/common/blob/master/CONTRIBUTING.md[contributing guidelines^] for more info.
-
 '''
