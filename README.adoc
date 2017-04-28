@@ -1,6 +1,8 @@
-= Bayesian Analytics
+= Fabric8-Analytics Analytics
 
-Clone Bayesian Analytics repository
+_Note on naming: The Fabric8-Analytics project has evolved from 2 different projects called "cucos" and "bayesian". We're currently in process of renaming the modules and updating documentation. Until that is completed, please consider "cucos" and "bayesian" to be synonyms of "Fabric8-Analytics"._
+
+Clone Fabric8-Analytics Analytics repository
 ----
 git clone git@gitlab.cee.redhat.com:bayesian/Analytics.git
 cd Analytics/models
@@ -39,5 +41,4 @@ $ curl -XPOST "packagejson=@tests/data/sample.json" "http://127.0.0.1:5000/api/v
 $ cd <your_model_of_choice>/src/unittest/scripts
 $ source virtual_test.sh
 ----
-
 '''
