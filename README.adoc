@@ -4,7 +4,7 @@ _Note on naming: The Fabric8-Analytics project has evolved from 2 different proj
 
 Clone Fabric8-Analytics Analytics repository
 ----
-git clone git@gitlab.cee.redhat.com:bayesian/Analytics.git
+git clone git@github.com:fabric8-analytics/fabric8-analytics-recommender.git
 cd Analytics/models
 ----
 
@@ -31,33 +31,11 @@ $ docker-compose -f docker-compose-analytics-training.yml up
 
 This will return AWS job id that can be used to track the training job on AWS EMR cluster.
 
-== Scoring: Run the recommendation service standalone
+== Scoring: Run the recommendation service
+Online scoring is performed by way of invoking stack-analyses API call on server.
+A user can follow https://github.com/fabric8-analytics/fabric8-analytics-server[fabric8-analytics-server] setup and then do
 
 ----
-$ cd <your_model_of_choice> #in this case we only have `similarity_with_frequent_patterns`
-$ virtualenv --system-site-packages env
-$ source env/bin/activate
-$ pip install -r deployment/requirements.txt
+$ curl -XPOST "manifest[]=@<path_to_manifest_file>" "http://127.0.0.1:32000/api/v1/stack-analyses"
 ----
 
-Copy `src/scoring/config.py.template` to `src/scoring/config.py` and update the configuration in `src/scoring/config.py`
-
-Start the server now
-----
-$ gunicorn --pythonpath src/scoring -b 0.0.0.0:5000 -t 300 ghazab_app:app
-----
-
-Call Recommendation API Endpoint
-----
-$ curl -XPOST "packagejson=@tests/data/sample.json" "http://127.0.0.1:5000/api/v1.0/recommendation"
-----
-
-= Tests
-
-== How to run tests?
-
-----
-$ cd <your_model_of_choice>/src/unittest/scripts
-$ source virtual_test.sh
-----
-'''
