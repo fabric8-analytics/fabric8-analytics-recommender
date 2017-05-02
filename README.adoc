@@ -1,4 +1,4 @@
-= Fabric8-Analytics Analytics
+= Fabric8-Analytics Recommender
 
 _Note on naming: The Fabric8-Analytics project has evolved from 2 different projects called "cucos" and "bayesian". We're currently in process of renaming the modules and updating documentation. Until that is completed, please consider "cucos" and "bayesian" to be synonyms of "Fabric8-Analytics"._
 
@@ -8,11 +8,30 @@ git clone git@gitlab.cee.redhat.com:bayesian/Analytics.git
 cd Analytics/models
 ----
 
-Each model accounts for offline/online analytics jobs. Accordingly the folder structure has been setup.
-  Offline model is all about training the analytics model.
-  Online model is then about scoring based on an input.
+Recommender can have multiple machine-learning models. Currently, it has only one model that is based on the idea of
+similarity with frequent patterns. A model should be trained with training data and that is an offline job. Once we have
+a model, we score it to generate recommendations for the given user request. That is online activity. Accordingly, the
+folder structure has been setup. Let us discuss these training and scoring activities in more details now.
 
-== Running the recommendation service standalone
+== Training: Train ML model with training data
+The training job happens in a 'serverless' way i.e. the AWS EMR cluster is setup on the fly and training job is
+submitted to that. This cluster goes away as soon as the training job is over ! This helps minimize AWS consumption that
+is very expensive.
+
+The current model finds frequent patterns i.e. set of software-packages that are used together most frequently in the
+given training data. These frequent patterns are then stored inside a Titan graph. So, you need to setup Titan graph
+database before running the training.
+
+Once you have graph database ready, you can specify AWS credentials and HTTP URL for Titan graph database server in the
+docker-compose-analytics-training.yml file and submit the training job as follows:
+----
+$ docker-compose -f docker-compose-analytics-training.yml build
+$ docker-compose -f docker-compose-analytics-training.yml up
+----
+
+This will return AWS job id that can be used to track the training job on AWS EMR cluster.
+
+== Scoring: Run the recommendation service standalone
 
 ----
 $ cd <your_model_of_choice> #in this case we only have `similarity_with_frequent_patterns`
