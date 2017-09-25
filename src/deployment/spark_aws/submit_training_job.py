@@ -30,14 +30,14 @@ def run(input_src_code_file):
     s3_log_key = config.DEPLOYMENT_PREFIX + '_spark_emr_log_' + str_cur_time + '/'
     s3_log_uri = 's3://{bucket}/{key}'.format(bucket=s3_log_bucket, key=s3_log_key)
 
-    print "Uploading the src code to AWS S3 URI " + s3_uri + " ..."
+    print("Uploading the src code to AWS S3 URI " + s3_uri + " ...")
     # Note: This overwrites if file already exists
     s3_client = boto3.client('s3',
                              aws_access_key_id=config.AWS_ACCESS_KEY_ID,
                              aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY)
     s3_client.upload_file(input_src_code_file, s3_bucket, s3_key)
 
-    print "Starting spark emr cluster and submitting the jobs ..."
+    print("Starting spark emr cluster and submitting the jobs ...")
     emr_client = boto3.client('emr',
                               aws_access_key_id=config.AWS_ACCESS_KEY_ID,
                               aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
@@ -69,30 +69,31 @@ def run(input_src_code_file):
             },
         ],
         Steps=[
-        {
-            'Name': 'Setup Debugging',
-            'ActionOnFailure': 'TERMINATE_CLUSTER',
-            'HadoopJarStep': {
-                'Jar': 'command-runner.jar',
-                'Args': ['state-pusher-script']
+            {
+                'Name': 'Setup Debugging',
+                'ActionOnFailure': 'TERMINATE_CLUSTER',
+                'HadoopJarStep': {
+                    'Jar': 'command-runner.jar',
+                    'Args': ['state-pusher-script']
+                }
+            },
+            {
+                'Name': 'setup - copy files',
+                'ActionOnFailure': 'CANCEL_AND_WAIT',
+                'HadoopJarStep': {
+                    'Jar': 'command-runner.jar',
+                    'Args': ['aws', 's3', 'cp', s3_uri, '/home/hadoop/']
+                }
+            },
+            {
+                'Name': 'Run Spark',
+                'ActionOnFailure': 'CANCEL_AND_WAIT',
+                'HadoopJarStep': {
+                    'Jar': 'command-runner.jar',
+                    'Args': ['spark-submit', '/home/hadoop/' + s3_key, config.AWS_BUCKET,
+                             config.GREMLIN_SERVER_URL_REST]
+                }
             }
-        },
-        {
-            'Name': 'setup - copy files',
-            'ActionOnFailure': 'CANCEL_AND_WAIT',
-            'HadoopJarStep': {
-                'Jar': 'command-runner.jar',
-                'Args': ['aws', 's3', 'cp', s3_uri, '/home/hadoop/']
-            }
-        },
-        {
-            'Name': 'Run Spark',
-            'ActionOnFailure': 'CANCEL_AND_WAIT',
-            'HadoopJarStep': {
-                'Jar': 'command-runner.jar',
-                'Args': ['spark-submit', '/home/hadoop/' + s3_key, config.AWS_BUCKET, config.GREMLIN_SERVER_URL_REST]
-            }
-        }
         ],
         VisibleToAllUsers=True,
         JobFlowRole='EMR_EC2_DefaultRole',
@@ -100,10 +101,11 @@ def run(input_src_code_file):
     )
 
     if response.get('ResponseMetadata').get('HTTPStatusCode') == 200:
-        print "Done! The cluster was submitted successfully! Job flow id is " + response.get('JobFlowId')
+        print("Done! The cluster was submitted successfully! Job flow id is " +
+              response.get('JobFlowId'))
     else:
-        print "Error! The job/cluster could not be created!"
-        print response
+        print("Error! The job/cluster could not be created!")
+        print(response)
 
 
 if __name__ == "__main__":
@@ -118,4 +120,3 @@ if __name__ == "__main__":
 
     src_code_file = sys.argv[1]
     run(src_code_file)
-

@@ -1,17 +1,19 @@
 from semantic_version import Spec
-# @author - Manjunath Sindagi 
-# This Code is meant for including comparison of two different versions of a packages based on relative difference method
+# @author - Manjunath Sindagi
+# This Code is meant for including comparison of two different versions of a
+# packages based on relative difference method
+
 
 class RelativeSimilarity(object):
     def __init__(self):
         pass
 
-    def compareversion(self,inputversion, stackversion):
+    def compareversion(self, inputversion, stackversion):
         inputversion = inputversion.strip()
         stackversion = stackversion.strip()
         specs = SemverComp.getspecs(inputversion)
         speclen = len(specs)
-        if speclen!=0:
+        if speclen != 0:
             for spec in specs:
                 if spec.match(Version(stackversion)):
                     return True
@@ -20,7 +22,7 @@ class RelativeSimilarity(object):
             return False
 
     @classmethod
-    def getspecs(self,inputversion):
+    def getspecs(self, inputversion):
         inputversion = inputversion.strip()
         specarray = []
         if inputversion.startswith("http"):
@@ -34,7 +36,7 @@ class RelativeSimilarity(object):
             for inver in inverarr:
                 inver = inver.strip()
                 if " " in inver:
-                    inver = inver.replace(" ",",")
+                    inver = inver.replace(" ", ",")
                     s = Spec(inver)
                     specarray.append(s)
                 else:
@@ -43,12 +45,12 @@ class RelativeSimilarity(object):
         elif "-" in inputversion:
             pass
         elif inputversion.endswith(".x"):
-            inputversion = inputversion.replace(".x",".0")
-            inputversion = ">="+inputversion
+            inputversion = inputversion.replace(".x", ".0")
+            inputversion = ">=" + inputversion
             s = Spec(inputversion)
             specarray.append(s)
         elif " " in inputversion:
-            inputversion = inputversion.replace(" ",",")
+            inputversion = inputversion.replace(" ", ",")
             s = Spec(inputversion)
             specarray.append(s)
         else:

@@ -68,7 +68,7 @@ def fire_gremlin(gremlin_server, str_gremlin):
 
     # TODO: check for error and raise exception
     if response.status_code != 200:
-        print ("ERROR %d: %s") % (response.status_code, response.reason)
+        print("ERROR %d: %s" % (response.status_code, response.reason))
 
     json_response = response.json()
     print json_response
@@ -92,9 +92,8 @@ def gremlin_str_ref_stack(ref_stack):
     """.format(sid, stack_name, eco_system, usage, source, is_ref_stack, dependencies)
 
 
-
 def main(sc, src_s3_bucket, target_gremlin_server):
-    gremlin_method_insert_pkg_version =  """
+    gremlin_method_insert_pkg_version = """
         def insert_package_version(g, ecosystem, name, version) {
         def pred_pkg = g.V().has('vertex_label', 'Package').has('name', name).has('ecosystem', ecosystem);
         def pkg_vertex = (pred_pkg.hasNext()) ? pred_pkg.next() : g.addV('vertex_label', 'Package', 'name', name, 'ecosystem', ecosystem).next()
@@ -105,7 +104,7 @@ def main(sc, src_s3_bucket, target_gremlin_server):
             pkg_vertex.addEdge('has_version', version_vertex);
         }
     }
-    """
+    """  # noqa
 
     gremlin_method_insert_ref_stack = """
     def insert_ref_stack(g, sid, sname, secosystem, usage, source, is_ref_stack, dependencies) {
@@ -119,7 +118,7 @@ def main(sc, src_s3_bucket, target_gremlin_server):
             }
         }
     }
-    """
+    """  # noqa
 
     sqlContext = SQLContext(sc)
     input_data = sc.wholeTextFiles("s3n://" + src_s3_bucket + "/")
@@ -133,7 +132,8 @@ def main(sc, src_s3_bucket, target_gremlin_server):
         lambda x: (x[0], filter(lambda pv: pv[0] != 'fail' and pv[1] != 'fail', x[1])))
     non_empty_package_versions = non_fail_package_versions.filter(lambda x: len(x[1]) > 0)
 
-    transactions = non_empty_package_versions.map(lambda x: map(lambda pv: "%s@@%s" % (pv[0], pv[1]), x[1]))
+    transactions = non_empty_package_versions.map(lambda x: map(lambda pv: "%s@@%s" %
+                                                  (pv[0], pv[1]), x[1]))
     unique_transactions = transactions.map(lambda x: list(set(x)))
     truncated_transactions = unique_transactions.map(lambda x: x[:MAX_WIDTH]).cache()
     count_transactions = truncated_transactions.count()
@@ -141,7 +141,8 @@ def main(sc, src_s3_bucket, target_gremlin_server):
                            minSupport=0.5, numPartitions=truncated_transactions.getNumPartitions())
     rddJsons = model.freqItemsets().map(
         lambda x: freqItemsetToRefStack(x.items, float(x.freq) / float(count_transactions)))
-    # rddJsons = rddRefStacks.filter(lambda x: len(x.get('dependencies').items()) > 4 and len(x.get('dependencies').items()) <= 10 )
+    # rddJsons = rddRefStacks.filter(lambda x: len(x.get('dependencies').items()) > 4 and
+    # len(x.get('dependencies').items()) <= 10 )
 
     # Save packages and versions
     rddVersions = rddJsons.flatMap(lambda x: x.get('dependencies').items())

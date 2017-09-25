@@ -62,7 +62,8 @@ def apis_index():
     routes_list = list_routes(app)
     return flask.jsonify({
         "routes_list": routes_list
-        })
+    })
+
 
 @app.route('/api/v1.0/recommendation', methods=['POST'])
 def get_recommendation():
@@ -80,13 +81,14 @@ def get_recommendation():
 
 @app.route('/api/v1.0/recommendation/<appstack_id>', methods=['GET'])
 def get_recommendation_for(appstack_id):
-    #recsvc = RecommenderService()
-    #data = recsvc.load_recommendation_for(appstack_id)
-    #if data is not None:
-    #    return flask.jsonify(data)
-    #else:
-    #    return flask.jsonify({"ERROR": "No such AppStack with ID: %s" % (appstack_id, )})
+    # recsvc = RecommenderService()
+    # data = recsvc.load_recommendation_for(appstack_id)
+    # if data is not None:
+    #     return flask.jsonify(data)
+    # else:
+    #     return flask.jsonify({"ERROR": "No such AppStack with ID: %s" % (appstack_id, )})
     return ({"ERROR": "No such API endpoint implemented"})
+
 
 if __name__ == "__main__":
     app.run()

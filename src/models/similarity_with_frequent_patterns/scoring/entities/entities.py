@@ -20,7 +20,7 @@ class AppStack(object):
         self.application_version = version
         self.application_description = description
         self.dependencies = dependencies
-        #add isrefstack attribute
+        # add isrefstack attribute
 
     @classmethod
     def read_from_file(self, fname):
@@ -39,13 +39,12 @@ class AppStack(object):
         version = data['version']
         dependencies = []
 
-        for k,v in data['dependencies'].items():
+        for k, v in data['dependencies'].items():
             dname = k
             dversion = v
             dependencies.append(Dependency(dname, dversion))
 
         return AppStack(name, version, description, dependencies)
-
 
     @classmethod
     def has_version_val(self, vspec):
@@ -91,7 +90,9 @@ class Recommendations(object):
 
 class SimilarStack(object):
 
-    def __init__(self, stack_id, usage_score=None, source= None, original_score=None, downstream_score=None, missing_packages=[], version_mismatch=[],downstream_component = []):
+    def __init__(self, stack_id, usage_score=None, source=None, original_score=None,
+                 downstream_score=None, missing_packages=[], version_mismatch=[],
+                 downstream_component=[]):
         self.stack_id = stack_id
         self.usage_score = usage_score
         self.source = source
@@ -102,7 +103,7 @@ class SimilarStack(object):
         self.downstream_component = downstream_component
 
     def __repr__(self):
-        return '{}: {} {}'.format(self.__class__.__name__,self.stack_id,self.similarity_score)
+        return '{}: {} {}'.format(self.__class__.__name__, self.stack_id, self.similarity_score)
 
     def __cmp__(self, other):
         if hasattr(other, 'getKey'):
@@ -126,4 +127,5 @@ class StackActivity(object):
     def __init__(self, stack_id, activity_done, date_val):
         self.stack_id = stack_id
         self.activity_done = activity_done
-        self.timestamp = time.mktime(datetime.datetime.strptime(date_val, "%Y-%m-%dT%H.%M.%S").timetuple())
+        self.timestamp = time.mktime(datetime.datetime.strptime(date_val,
+                                                                "%Y-%m-%dT%H.%M.%S").timetuple())
