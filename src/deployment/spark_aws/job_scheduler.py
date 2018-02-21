@@ -1,3 +1,5 @@
+"""Script to schedule training job."""
+
 import submit_training_job
 
 if __name__ == "__main__":
