@@ -1,3 +1,5 @@
+"""Handlers for all REST API endpoints."""
+
 import flask
 import json
 import sys
@@ -31,6 +33,7 @@ if sys.version_info.major == 2:
 
 # Reference: http://flask.pocoo.org/snippets/117/
 def list_routes(app):
+    """Return all declared routes."""
     output = []
     for rule in app.url_map.iter_rules():
         options = {}
@@ -48,16 +51,19 @@ def list_routes(app):
 
 @app.errorhandler(404)
 def not_found(error):
+    """Return response when the required URL is not found."""
     return make_response(flask.jsonify({'error': 'URL NOT FOUND'}), 404)
 
 
 @app.route('/')
 def index():
+    """Handle the REST API endpoint /."""
     return redirect('/api/v1.0/')
 
 
 @app.route('/api/v1.0/')
 def apis_index():
+    """Handle the REST API endpoint /api/v1.0/."""
     app.logger.info("APIs main")
     routes_list = list_routes(app)
     return flask.jsonify({
@@ -67,6 +73,7 @@ def apis_index():
 
 @app.route('/api/v1.0/recommendation', methods=['POST'])
 def get_recommendation():
+    """Handle the REST API endpoint /api/v1.0/recommendation."""
     f = request.files['packagejson']
     file_name = f.filename
     if file_name == '':
@@ -81,6 +88,7 @@ def get_recommendation():
 
 @app.route('/api/v1.0/recommendation/<appstack_id>', methods=['GET'])
 def get_recommendation_for(appstack_id):
+    """Handle the REST API endpoint /api/v1.0/recommendation/<appstack_id>'."""
     # recsvc = RecommenderService()
     # data = recsvc.load_recommendation_for(appstack_id)
     # if data is not None:
