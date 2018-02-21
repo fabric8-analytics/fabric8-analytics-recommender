@@ -1,3 +1,5 @@
+"""Flask-based application initialization and configuration."""
+
 from flask import Flask
 from server import app
 

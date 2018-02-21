@@ -1,3 +1,5 @@
+"""Compare two different versions of a package using relative difference method."""
+
 from semantic_version import Spec
 # @author - Manjunath Sindagi
 # This Code is meant for including comparison of two different versions of a
@@ -5,10 +7,14 @@ from semantic_version import Spec
 
 
 class RelativeSimilarity(object):
+    """Compare two different versions of a package using relative difference method."""
+
     def __init__(self):
+        """Construct a new instalce of RelativeSimilarity class."""
         pass
 
     def compareversion(self, inputversion, stackversion):
+        """Compare versions for given component against the prepared stack version."""
         inputversion = inputversion.strip()
         stackversion = stackversion.strip()
         specs = SemverComp.getspecs(inputversion)
@@ -23,6 +29,7 @@ class RelativeSimilarity(object):
 
     @classmethod
     def getspecs(self, inputversion):
+        """Retrieve the version specifiers."""
         inputversion = inputversion.strip()
         specarray = []
         if inputversion.startswith("http"):

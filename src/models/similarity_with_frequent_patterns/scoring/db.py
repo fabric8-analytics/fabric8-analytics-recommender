@@ -1,4 +1,5 @@
-# This module contains database helper functions
+"""This module contains database helper functions."""
+
 # TODO: move away from low-level psycopg2; check out SQLAlchemy
 
 from flask import g
@@ -14,6 +15,7 @@ _bayesian_graph_url = app.config['BAYESIAN_GRAPH_URL']
 
 # TODO  - change the url as configuration parameter
 def get_reference_stacks_from_graph(list_packages):
+    """Get the reference stacks from the graph database."""
     # list_packages = ["path-type","core-util-is","node-uuid"]
     str_packages = ','.join(map(lambda x: "'" + x + "'", list_packages))
     payload = {'gremlin': "g.V().hasLabel('Version').has('pname', within(" + str_packages +
@@ -64,6 +66,7 @@ def get_reference_stacks_from_graph(list_packages):
 
 
 def get_input_stacks_vectors_from_graph(inputList):
+    """Get input stack vectors from graph db."""
     inputStackList = []
     for package, version in inputList.items():
         if package is not None:

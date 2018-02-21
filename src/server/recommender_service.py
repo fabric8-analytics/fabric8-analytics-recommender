@@ -1,13 +1,19 @@
+"""Implementation of reccomender service."""
+
 import json
 from models.similarity_with_frequent_patterns.scoring import db
 from models.similarity_with_frequent_patterns.scoring.similarity import relativesimilarity
 
 
 class RecommenderService(object):
+    """Implementation of reccomender service."""
+
     def __init__(self):
+        """Construct new instance of this class."""
         pass
 
     def generate_recommendations_for(self, input_manifest):
+        """Generate recommendations for provided manifest file."""
         input_stack = {d.package_name: d.version_spec.spec for d in input_manifest.dependencies}
         rs = relativesimilarity.RelativeSimilarity()
         # Read data from Graph

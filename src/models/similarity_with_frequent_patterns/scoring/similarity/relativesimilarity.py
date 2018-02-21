@@ -1,3 +1,5 @@
+"""Compare two different versions of a package using relative difference method."""
+
 # @author - Saket Kumar Choudhary.
 # This Code is meant to include similarity between two different versions of a
 # package based on relative difference method.
@@ -8,17 +10,22 @@ from server import app
 
 
 class RelativeSimilarity(object):
+    """Compare two different versions of a package using relative difference method."""
+
     def __init__(self):
+        """Construct a new instalce of RelativeSimilarity class."""
         pass
 
     @classmethod
     def compare_version(self, ref_component_version, input_component_version):
+        """Compare versions of two components."""
         if ref_component_version.strip() == input_component_version.strip():
             return 1
         return 0
 
     @classmethod
     def relative_similarity(self, x, y):
+        """Compute relative similarity between two sequences."""
         nu = sum(abs(a - b) for a, b in zip(x, y))
         dnu = sum(x) + sum(y)
         if dnu == 0:
@@ -30,6 +37,7 @@ class RelativeSimilarity(object):
 
     @classmethod
     def get_refstack_component_list(self, ref_stack):
+        """Generate list of package names and list of versions."""
         refstack_component_list = []
         corresponding_version = []
         ref_stack_deps = ref_stack["dependencies"]
@@ -41,6 +49,7 @@ class RelativeSimilarity(object):
 
     @classmethod
     def getp_value_graph(self, component_name, input_stack, ref_stack):
+        """Get the properties for the component from input stack and from reference stack too."""
         distancevalue = 0.0
         pvalue = 0.0
         input_data = [0, 0, 0]
@@ -66,6 +75,7 @@ class RelativeSimilarity(object):
 
     @classmethod
     def downstream_boosting(self, missing_package_list, ref_stack, denominator):
+        """Check for additional and missing downstream components."""
         additional_downstream = 0.0
         missing_downstream_component = []
         for package in missing_package_list:
@@ -78,10 +88,11 @@ class RelativeSimilarity(object):
 
     @classmethod
     def compute_modified_jaccard_similarity(self, len_input_stack, len_ref_stack, vcount):
+        """Compute the modified Jaccard similarity."""
         return vcount / max(len_ref_stack, len_input_stack)
 
     def filter_package(self, input_stack, ref_stacks):
-        '''Function applies Jaccard Similarity at Package Name only'''
+        """Apply Jaccard Similarity at Package Name only."""
         input_set = set(list(input_stack.keys()))
         jaccard_threshold = float(app.config['JACCARD_THRESHOLD'])
         filetered_ref_stacks = []
@@ -100,7 +111,7 @@ class RelativeSimilarity(object):
         return filetered_ref_stacks
 
     def find_relative_similarity(self, input_stack, input_stack_vectors, filtered_ref_stacks):
-        '''Function for Relative Similarity'''
+        """Find Relative Similarity."""
         input_set = set(list(input_stack.keys()))
         similarity_score_threshold = float(app.config['SIMILARITY_SCORE_THRESHOLD'])
         similar_stack_lists = []
