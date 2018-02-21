@@ -1,3 +1,5 @@
+"""Generator for reference stack."""
+
 # Imports
 from pyspark import SparkConf, SparkContext
 from pyspark.mllib.fpm import FPGrowth
@@ -21,10 +23,12 @@ MAX_WIDTH = 100  # Max number of packages/components allowed in a transaction
 
 # OTHER FUNCTIONS/CLASSES
 def extract_ecosystem(data):
+    """Extract sequence of ecosystems from given data."""
     return [] if data is None else map(lambda x: x.get("ecosystem"), data)
 
 
 def map_package_versions(json_data):
+    """Map versions to packages."""
     if json_data is None:
         return []
     else:
@@ -37,6 +41,7 @@ def map_package_versions(json_data):
 
 
 def freqItemsetToRefStack(freqItemset, freq):
+    """Generate data structure that represents reference stack."""
     ref_stack = {}  # Empty map
     if freqItemset is not None:
         pv_list = map(lambda x: x.split("@@"), freqItemset)
@@ -63,6 +68,7 @@ def freqItemsetToRefStack(freqItemset, freq):
 
 
 def fire_gremlin(gremlin_server, str_gremlin):
+    """Post the Gremlin statement to the Gremlin server."""
     payload = {'gremlin': str_gremlin}
     response = requests.post(gremlin_server, data=json.dumps(payload))
 
@@ -71,15 +77,17 @@ def fire_gremlin(gremlin_server, str_gremlin):
         print("ERROR %d: %s" % (response.status_code, response.reason))
 
     json_response = response.json()
-    print json_response
+    print(json_response)
 
 
 def gremlin_str_pkg_version(ecosystem, pkg_name, version):
+    """Create Gremlin statement to insert package+version into database."""
     return """insert_package_version(g, '{}', '{}', '{}');
     """.format(ecosystem, pkg_name, version)
 
 
 def gremlin_str_ref_stack(ref_stack):
+    """Create Gremlin statement to insert data info reference stack."""
     stack_name = ref_stack.get('name')
     eco_system = 'trial'
     usage = ref_stack.get('usage')
@@ -93,6 +101,7 @@ def gremlin_str_ref_stack(ref_stack):
 
 
 def main(sc, src_s3_bucket, target_gremlin_server):
+    """Start the reference stack generator."""
     gremlin_method_insert_pkg_version = """
         def insert_package_version(g, ecosystem, name, version) {
         def pred_pkg = g.V().has('vertex_label', 'Package').has('name', name).has('ecosystem', ecosystem);
