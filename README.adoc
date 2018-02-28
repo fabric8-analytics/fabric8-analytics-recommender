@@ -45,3 +45,15 @@ A user can follow https://github.com/fabric8-analytics/fabric8-analytics-server[
 $ curl -XPOST "manifest[]=@<path_to_manifest_file>" "http://127.0.0.1:32000/api/v1/stack-analyses"
 ----
 
+== Coding standards
+
+You can use scripts to check if the code follows PEP8 coding standards. How to use these script:
+
+----
+./run-linter.sh
+./check-docstyle.sh
+----
+
+The first script checks the indentation, line lengths, variable names, whitespace around operators etc. The second
+script checks all documentation strings - its presense and format. Please fix any warnings and errors reported by these
+scripts.
