@@ -50,7 +50,7 @@ def list_routes(app):
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found(_error):
     """Return response when the required URL is not found."""
     return make_response(flask.jsonify({'error': 'URL NOT FOUND'}), 404)
 
@@ -87,7 +87,7 @@ def get_recommendation():
 
 
 @app.route('/api/v1.0/recommendation/<appstack_id>', methods=['GET'])
-def get_recommendation_for(appstack_id):
+def get_recommendation_for(_appstack_id):
     """Handle the REST API endpoint /api/v1.0/recommendation/<appstack_id>'."""
     # recsvc = RecommenderService()
     # data = recsvc.load_recommendation_for(appstack_id)
