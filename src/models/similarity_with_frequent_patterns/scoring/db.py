@@ -2,9 +2,7 @@
 
 # TODO: move away from low-level psycopg2; check out SQLAlchemy
 
-from flask import g
 import json
-import psycopg2
 import requests
 
 from server import app

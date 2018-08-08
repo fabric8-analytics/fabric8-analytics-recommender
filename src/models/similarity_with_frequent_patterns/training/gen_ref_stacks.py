@@ -3,14 +3,11 @@
 # Imports
 from pyspark import SparkConf, SparkContext
 from pyspark.mllib.fpm import FPGrowth
-from pyspark.sql import SQLContext
-from pyspark.sql import Row
+# from pyspark.sql import SQLContext
 
-from operator import add
 import sys
 import json
 import requests
-import random
 from uuid import uuid4
 
 # TODOs:
@@ -129,7 +126,7 @@ def main(sc, src_s3_bucket, target_gremlin_server):
     }
     """  # noqa
 
-    sqlContext = SQLContext(sc)
+    # sqlContext = SQLContext(sc)
     input_data = sc.wholeTextFiles("s3n://" + src_s3_bucket + "/")
 
     not_null_data = input_data.filter(lambda x: x[1].strip() not in ['null', ''])

@@ -50,7 +50,7 @@ class RelativeSimilarity(object):
     @classmethod
     def getp_value_graph(self, component_name, input_stack, ref_stack):
         """Get the properties for the component from input stack and from reference stack too."""
-        distancevalue = 0.0
+        # distancevalue = 0.0
         pvalue = 0.0
         input_data = [0, 0, 0]
         ref_data = [0, 0, 0]
@@ -116,7 +116,7 @@ class RelativeSimilarity(object):
         similarity_score_threshold = float(app.config['SIMILARITY_SCORE_THRESHOLD'])
         similar_stack_lists = []
         max_sim_score = 0.0
-        boosted_score_list = []
+        # boosted_score_list = []
         for ref_stack in filtered_ref_stacks:
             missing_package_list = []
             missing_package_version = []
@@ -124,7 +124,7 @@ class RelativeSimilarity(object):
             vcount = 0
             refstack_component_list, corresponding_version = \
                 self.get_refstack_component_list(ref_stack)
-            refstack_component_set = set(refstack_component_list)
+            # refstack_component_set = set(refstack_component_list)
             for component, ref_stack_component_version in zip(refstack_component_list,
                                                               corresponding_version):
                 if component in input_stack:
