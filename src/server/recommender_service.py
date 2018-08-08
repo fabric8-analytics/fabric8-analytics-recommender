@@ -1,6 +1,5 @@
 """Implementation of reccomender service."""
 
-import json
 from models.similarity_with_frequent_patterns.scoring import db
 from models.similarity_with_frequent_patterns.scoring.similarity import relativesimilarity
 
