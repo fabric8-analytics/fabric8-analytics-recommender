@@ -1,6 +1,6 @@
 """Compare two different versions of a package using relative difference method."""
 
-from semantic_version import Spec
+from semantic_version import Spec, SemverComp, Version
 # @author - Manjunath Sindagi
 # This Code is meant for including comparison of two different versions of a
 # packages based on relative difference method
