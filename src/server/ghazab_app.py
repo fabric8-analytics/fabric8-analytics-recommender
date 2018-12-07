@@ -10,12 +10,13 @@ from flask import Flask, request, redirect, make_response
 from flask_cors import CORS
 from server.recommender_service import RecommenderService
 from models.similarity_with_frequent_patterns.scoring.entities.entities import AppStack
-from server import app
 
 logging.basicConfig(filename='error.log', level=logging.DEBUG)
 app = Flask(__name__)
 app.config.from_object('server.config')
 CORS(app)
+
+from imp import reload
 
 # Python2.x: Make default encoding as UTF-8
 if sys.version_info.major == 2:
