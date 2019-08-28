@@ -21,6 +21,8 @@ function prepare_venv() {
         # python36 which is in CentOS does not have virtualenv binary
         VIRTUALENV="$(which virtualenv-3)"
     fi
+
+    ${VIRTUALENV} -p python3 venv && source venv/bin/activate && python3 "$(which pip3)" install pycodestyle
 }
 
 pushd "${SCRIPT_DIR}/.."
